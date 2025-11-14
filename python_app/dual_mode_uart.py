@@ -69,12 +69,10 @@ class FpgaClockApp:
         self.create_settings_panel(self.setting_frame)
         self.main_frame.pack(fill='both', expand=True)
 
-        # --- Serial port (Nem változott) ---
         self.open_serial_port()
 
         self.master.after(50, self.check_serial_queue)
 
-        # Clean shutdown (Nem változott)
         master.protocol("WM_DELETE_WINDOW", self.on_closing)
 
         master.geometry("1024x720")
@@ -197,7 +195,6 @@ class FpgaClockApp:
             side=tk.BOTTOM, fill='x', pady=10)
 
     def create_settings_panel(self, frame):
-        """Definition of the settings panel with updated layout (Clock on top, Alarm below)."""
         frame.config(bg="#1E1E1E", padx=20, pady=20)
 
         header_frame = tk.Frame(frame, bg="#1E1E1E")
@@ -254,10 +251,6 @@ class FpgaClockApp:
                    style='Custom.TButton').pack(pady=(15, 5), fill='x')
 
     def _validate_int_wrapper(self, proposed_value, min_val, max_val):
-        """
-        Wrapper a Tkinter validációs parancsához.
-        min_val és max_val stringként jönnek, konvertálni kell.
-        """
         if not proposed_value:
             return True
 
@@ -276,7 +269,7 @@ class FpgaClockApp:
 
             return min_v <= value <= max_v
         except ValueError:
-            return False  # Nem szám
+            return False 
 
     def create_manual_settings(self, frame):
         self.m_month = tk.IntVar(value=self.time_data.get(TYPE_MONTH, 1))
@@ -365,17 +358,6 @@ class FpgaClockApp:
             row=0, column=2, sticky='w')
 
         grid_frame.grid_columnconfigure(1, weight=1)
-
-        # tk.Label(grid_frame, text="Alarm Status:", bg="#2c3e50", fg="#ecf0f1", font=('Inter', 11, 'bold')).grid(
-        #     row=1, column=0, sticky='w', pady=5, padx=10)
-        #
-        # radio_frame = tk.Frame(grid_frame, bg="#2c3e50")
-        # radio_frame.grid(row=1, column=1, sticky='w', pady=5, padx=10)
-
-        # ttk.Radiobutton(radio_frame, text="Enabled", variable=self.alarm_enabled, value=True,
-        #                 style='Alarm.TRadiobutton').pack(side=tk.LEFT, padx=(0, 15))
-        # ttk.Radiobutton(radio_frame, text="Disabled", variable=self.alarm_enabled, value=False,
-        #                 style='Alarm.TRadiobutton').pack(side=tk.LEFT)
 
         tk.Label(frame,
                  text="Note: Sending alarm setting temporarily pauses data reading.",
@@ -500,7 +482,7 @@ class FpgaClockApp:
         self.exit_settings()
 
     def send_alarm_data(self, hour, minute, enabled):
-        data = [0xBB, hour, minute]     # , enabled]
+        data = [0xBB, hour, minute]
         status_alarm = f"{hour:02d}:{minute:02d} | {'Enabled' if enabled else 'Disabled'}"
         try:
             self.ser.write(bytes(data))
