@@ -1,26 +1,5 @@
 `timescale 1ns / 1ps
-////////////////////////////////////////////////////////////////////////////////////
-//// Company: 
-//// Engineer: 
-//// 
-//// Create Date: 03.10.2025 16:09:12
-//// Design Name: 
-//// Module Name: clock_project_top
-//// Project Name: 
-//// Target Devices: 
-//// Tool Versions: 
-//// Description: 
-//// 
-//// Dependencies: 
-//// 
-//// Revision:
-//// Revision 0.01 - File Created
-//// Additional Comments:
-//// 
-////////////////////////////////////////////////////////////////////////////////////
 
-
-//// File: clock_project_top.v
 module clock_project_top (
         input CLK100MHZ, 
         input btn_rst, btn_set, btn_alm, btn_ent, btn_ret, btn_bstep,
@@ -49,7 +28,7 @@ module clock_project_top (
     
     parameter TX_IDLE  = 3'b000;
     parameter TX_MARKER= 3'b001;
-    parameter TX_TYPE  = 3'b110; // 0xB0, 0xB1, 0xB2, 0xB3, 0xB0 értékek
+    parameter TX_TYPE  = 3'b110; 
     parameter TX_VALUE = 3'b111;
    
     reg [1:0] mode = CLOCK;
@@ -385,16 +364,14 @@ module clock_project_top (
                     uart_tx_start <= 1'b0;
             end
         end
+
         
- 
-    // gombok pergésmentesítése
     debouncer enter_debouncer(.btn(btn_ent), .clk(CLK100MHZ), .d_btn(btn_ent_d));
     debouncer set_debouncer(.btn(btn_set), .clk(CLK100MHZ), .d_btn(btn_set_d));
     debouncer alarm_debouncer(.btn(btn_alm), .clk(CLK100MHZ), .d_btn(btn_alm_d));
     debouncer return_debouncer(.btn(btn_ret), .clk(CLK100MHZ), .d_btn(btn_ret_d));
     debouncer back_step_debouncer(.btn(btn_bstep), .clk(CLK100MHZ), .d_btn(btn_bstep_d));
-    
-   // Asztali óra 
+ 
     time_core time_core(
         .clk(CLK100MHZ),
         .rst(btn_rst_time),
@@ -414,7 +391,6 @@ module clock_project_top (
         .led(led_time)
     );
     
-    // Beállítások
     set_control set_control (
         .clk(CLK100MHZ), 
         .rst(btn_rst_set), 
@@ -433,8 +409,7 @@ module clock_project_top (
         .out_day(set_day),
         .out_month(set_month)
     );
-    
-    // Ébresztõ    
+      
     alarm_control alarm_control(
         .clk(CLK100MHZ),
         .rst(~btn_rst), 
@@ -456,7 +431,6 @@ module clock_project_top (
         .rgb_led_2(II_RGB_LED)
     );
     
-    // Bejövõ adatok UART-on
     uart_rx #(
             .CLK_FREQ  (100_000_000),
             .BAUD_RATE (9600)
@@ -468,7 +442,6 @@ module clock_project_top (
             .rx_done(rx_data_valid)
     );
     
-    // Kimenõ adatok UART-on
     uart_tx #(
             .CLK_FREQ(100_000_000), 
             .BAUD_RATE(9600)
