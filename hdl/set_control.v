@@ -1,24 +1,4 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 04.10.2025 21:55:45
-// Design Name: 
-// Module Name: set_control
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
-
 
 module set_control(
         input clk,
@@ -108,15 +88,12 @@ module set_control(
                                 else
                                     begin
                                         case (set_month)
-                                            // 31 napos hónapok: Január (1), Március (3), Május (5), Július (7), Augusztus (8), Október (10), December (12)
                                             4'd1, 4'd3, 4'd5, 4'd7, 4'd8, 4'd10, 4'd12: 
                                                 set_day = (set_day > 31) ? 31 : set_day;
                                             
-                                            // 30 napos hónapok: Április (4), Június (6), Szeptember (9), November (11)
                                             4'd4, 4'd6, 4'd9, 4'd11: 
                                                 set_day = (set_day > 30) ? 30 : set_day;
                                                 
-                                            // Február (2) - 28 nap 
                                             4'd2: 
                                                 set_day = (set_day > 28) ? 28 : set_day;                      
                                             default:
@@ -198,16 +175,13 @@ module set_control(
                             else
                                 begin
                                     case (disp_month)
-                                        // 31 napos hónapok: Január (1), Március (3), Május (5), Július (7), Augusztus (8), Október (10), December (12)
-                                        4'd1, 4'd3, 4'd5, 4'd7, 4'd8, 4'd10, 4'd12: 
+                                         4'd1, 4'd3, 4'd5, 4'd7, 4'd8, 4'd10, 4'd12: 
                                             disp_day = (disp_day > 31) ? 31 : disp_day;
                                         
-                                        // 30 napos hónapok: Április (4), Június (6), Szeptember (9), November (11)
                                         4'd4, 4'd6, 4'd9, 4'd11: 
                                             disp_day = (disp_day > 30) ? 30 : disp_day;
                                             
-                                        // Február (2) - 28 nap 
-                                        4'd2: 
+                                       4'd2: 
                                             disp_day = (disp_day > 28) ? 28 : disp_day;                      
                                         default:
                                             disp_day = (disp_day > 28) ? 28 : disp_day;
@@ -252,7 +226,6 @@ module set_control(
             end
         end
 
-        // kijelzõ meghajt 
         hex7seg segdecoder ( 
             .val(hex), 
             .cclk(clk), 
@@ -261,15 +234,13 @@ module set_control(
             .dig(dig)
         );
         
-        // led kapcsolás
         hexled seconds_display (
             .val(seconds),
             .rst(rst),
             .led(led)    
         );
         
-        // segmensek l trehoz sa sz mokb l, t zesekre  s egyesekre bont s
-        assign miu = disp_min % 10;
+         assign miu = disp_min % 10;
         assign mit = disp_min / 10;
         assign hu  = disp_hour % 10;
         assign ht  = disp_hour / 10;
