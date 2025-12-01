@@ -44,10 +44,12 @@ module clock_project_top (
         output [2:0] I_RGB_LED, II_RGB_LED
     );
     
-    parameter CLOCK = 2'b00;
-    parameter SET   = 2'b01;
-    parameter ALARM = 2'b10;
+    // State definitions for the main state machine
+    parameter CLOCK = 2'b00; // Normal clock operation mode
+    parameter SET   = 2'b01; // Time setting mode
+    parameter ALARM = 2'b10; // Alarm setting mode
     
+    // State definitions for the time setting state machine
     parameter IDLE     = 3'b000;
     parameter MONTHS   = 3'b001;
     parameter DAYS     = 3'b010;

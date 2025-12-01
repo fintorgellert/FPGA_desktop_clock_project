@@ -29,6 +29,23 @@ class FpgaClockApp:
     This class encapsulates the entire functionality of the GUI application,
     including serial communication with the FPGA, displaying the time and date,
     and providing a user interface for setting the time and an alarm.
+
+    Attributes:
+        master: The root Tkinter window.
+        ser: The serial port object.
+        is_serial_open: Boolean flag indicating if the serial port is open.
+        read_thread: Thread for reading from the serial port.
+        running: Boolean flag to control the main loop.
+        is_setting_mode: Boolean flag indicating if the app is in settings mode.
+        serial_queue: Queue for storing data received from the serial port.
+        time_data: Dictionary storing the current time and date components.
+        current_year: The current year.
+        time_str: StringVar for the time display.
+        date_str: StringVar for the date display.
+        status_str: StringVar for the status bar.
+        alarm_hour: IntVar for the alarm hour setting.
+        alarm_minute: IntVar for the alarm minute setting.
+        alarm_enabled: BooleanVar for the alarm enable setting.
     """
     MONTH_NAMES = {
         1: "January", 2: "February", 3: "March", 4: "April", 5: "May", 6: "June",
@@ -281,6 +298,16 @@ class FpgaClockApp:
                    style='Custom.TButton').pack(pady=(15, 5), fill='x')
 
     def _validate_int_wrapper(self, proposed_value, min_val, max_val):
+        """Validates if the input is an integer within the specified range.
+
+        Args:
+            proposed_value: The value entered by the user.
+            min_val: The minimum allowable value.
+            max_val: The maximum allowable value.
+
+        Returns:
+            True if the value is valid or empty, False otherwise.
+        """
         if not proposed_value:
             return True
 
